@@ -11,6 +11,7 @@
             <div id="#background-container">
                 <img id="background-photo" src="https://www.intelliventors.com/wp-content/uploads/2012/04/wall-street-bull.jpg">
                 <button id="start-game">Start Game</button>
+                <h1 id="instructions">INSTRUCTIONS</h1>
               <div class="target-money">
                 <label for="target-money">Target Money Goal</label>
                 <input id="target-money" value="1000000" type="number">
@@ -26,7 +27,7 @@
                 
                     <div id="player1-greed" class="player1-greed">
                         <label for="player1-greed">GREED LEVEL:</label>
-                        <meter id="player1-greed" value="5" min="0" max="10" low="3" high="7"></meter>
+                        <meter id="player1-greed" value="10" min="0" max="10" low="3" high="7"></meter>
                         <h3>10</h2>
                     </div>
                 </div> 
@@ -40,7 +41,7 @@
                 
                     <div id="player2-greed" class="player2-greed">
                         <label for="player1-greed">GREED LEVEL:</label>
-                        <meter id="player1-greed" value="8" min="0" max="10" low="3" high="7"></meter>
+                        <meter id="player1-greed" value="10" min="0" max="10" low="3" high="7"></meter>
                         <h3>10</h2>
                     </div>
                 </div> 
@@ -57,7 +58,7 @@
         <div id="modal-picture-container" class="modal-picture">
             <div id="modal-picture" class="modal-picture">
                 <p id="modal-picture-message">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit, officia ducimus illum ipsum inventore doloribus possimus, laborum quibusdam, ex sapiente corporis! Magni accusamus qui voluptatum, consequuntur ipsum itaque sint eum.</p>
-                    <button id="close-modal-picture">CLOSE</button>
+                    
             </div>
         </div> 
 
@@ -70,12 +71,21 @@
             <img id="starbucks" class="stock-symbols not-active" src="./Images/Starbucks.png">
         </div>
 
-        <div class="action-buttons">
+        <div id="action-buttons" class="action-buttons">
             <button id="keep-trading" class="action-buttons">Trade Stocks</button>
             <button id="keep-tradingP2" class="action-buttons">Trade Stocks</button>
             <button id="p1-hedge" class="action-buttons">Hedge Positions & Take Day Off</button>
             <button id="p2-hedge" class="action-buttons">Hedge Positions & Take Day Off</button>
         </div>
+
+        <h1 id="vs">VS.</h1>
+
+       <div id="money-change-container" class="money-change-message">
+          <div id="money-change-modal" class="money-change-message">
+            <p id="money-change-message" class="money-change-message">Your portfolio changed $</p>
+          </div>
+       </div>
+       
 
       
   

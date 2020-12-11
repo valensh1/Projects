@@ -19,13 +19,20 @@ let $modalMessage = $('#modal-message');
 let $keepTradingButtonP1 = $('#keep-trading');
 let $keepTradingButtonP2 = $('#keep-tradingP2');
 const $modalPictureSpot = $('#modal-picture');
+let $modalPictureMessage = $('#modal-picture-message');
+let $moneyChangeMessage = $('#money-change-message');
+const $moneyChangeContainer = $('#money-change-container');
+const $leftArrow = $('#action-buttons');
+const $instructions = $('#instructions');
+const instructionsGuide = `This is a 2 player game in which the objective is to see which Wall Street trader can reach the goal of hitting $1M first without losing all their money. Click on the Trade Stocks button to start each trading day but don't be too greedy. Each trading day is a game of chance whether you will be successful for the day or encounter a stock market crash or some life event that causes you to pull some money from your account to pay for some expenses. At any point you can take the day off from trading and hedge your positions which will keep your portfolio value intact and let the other player start trading. ARE YOU MADE FOR WALL STREET? GOOD LUCK TRADING!`
 let marketMove;
 let eventMover;
 let StartingMoney = 100000;
-let TargetWinGoal = 150000;
+let TargetWinGoal = 1000000;
 let $targetMoneyUserInput = $('#target-money');
 let playerTurn = 'p1';
-let fullPlayerSpelling = playerTurn === 'p1' ? 'player1' : 'player2';
+let fullPlayerSpelling;
+
 
 //---------------------------------Modal Section images and GIF's----------------------------------
     
@@ -40,11 +47,13 @@ let fullPlayerSpelling = playerTurn === 'p1' ? 'player1' : 'player2';
     const gordonGeckkoGifLocal = $('<img>').attr('id','picture-modal').attr('src',"./Images/Gifs/Gordon Gekko.gif");
     const pDiddy = $('<img>').attr('id','picture-modal').attr('src',"https://external-preview.redd.it/27Ux5UNLdcQui0zEYzCVubSdhN_m7govbW4CPnCCwgY.gif?s=24e32600c4d12adf72c4c45b71070eca28bc13e7");
     const pDiddyLocal = $('<img>').attr('id','picture-modal').attr('src',"./Images/Gifs/P Diddy.gif");
-    
+    const jimCramerGif = $('<img>').attr('id','picture-modal').attr('src',"https://media0.giphy.com/media/AgHBbekqDik0g/200.gif");
+    const jimCramerGifLocal = $('<img>').attr('id','picture-modal').attr('src',"./Images/Gifs/Jim Cramer.gif");
+    const wolfofWallStreetFlexingLocal = $('<img>').attr('id','picture-modal').attr('src',"./Images/Gifs/Wolf of Wall Street Flexing.gif");
     
     // LOSING MONEY / DOING BAD MODAL PICS & GIF's
     const stockCrash1Gif = $('<img>').attr('id','picture-modal').attr('src',"https://thumbs.gfycat.com/HorribleForkedGeese-size_restricted.gif");
-    const stockCrash1GifLocal = $('<img>').attr('id','picture-modal').attr('src',"./Images/Gifs/Wolf of Wall Street Leonardo Worried.gif");
+    const stockCrash1GifLocal = $('<img>').attr('id','picture-modal').attr('src',"./Images/Gifs/StockCrash1.gif");
     const stockCrash2Gif = $('<img>').attr('id','picture-modal').attr('src',"https://imagesvc.meredithcorp.io/v3/mm/gif?q=85&c=sc&poi=face&w=500&h=333&url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F13%2F2016%2F02%2F27%2Fgif-of-leonardo-dicaprio-crying-in-the-departed-gif.gif");
     const stockCrash2GifLocal = $('<img>').attr('id','picture-modal').attr('src',"./Images/Gifs/Wolf of Wall Street Leonardo Worried2.gif");
     const stockCrash3Gif = $('<img>').attr('id','picture-modal').attr('src',"https://media1.tenor.com/images/c3f4c3d9cb4241d4a695fe28f81438af/tenor.gif?itemid=3572004");
@@ -57,10 +66,16 @@ let fullPlayerSpelling = playerTurn === 'p1' ? 'player1' : 'player2';
     const dentalPicLocal = $('<img>').attr('id','picture-modal').attr('src',"./Images//Gifs/Dental.gif");
     const brokePic = $('<img>').attr('id','picture-modal').attr('src',"https://media4.giphy.com/media/ZGH8VtTZMmnwzsYYMf/200.gif");
     const brokePicLocal = $('<img>').attr('id','picture-modal').attr('src',"./Images/Gifs/Broke.gif");
-    
-    const makingMoneyModalPics = [jMaguireShowMeMoneyGifLocal,wolfofWallStreetBossGifLocal,wolfofWallStreetLeonardoDanceGifLocal,gordonGeckkoGifLocal,pDiddyLocal];
-    const modalPicMessages = [`Making money is getting easy but don"t be greedy!`,`Money ain"t a thang!`, `Time to party on Wall Street I"m making money!`,`Gettin' Greedy`,`Making so much money I don't know what to do with it`]
-    const losingMoneyModalPics = [stockCrash1GifLocal,stockCrash2GifLocal,stockCrash3GifLocal,workerStrikePicLocal,collegePicLocal,dentalPicLocal,brokePicLocal];
+    const jimCramerSellGif = $('<img>').attr('id','picture-modal').attr('src',"https://media1.tenor.com/images/c303a3365b830959e1e9a5fa3a57bffd/tenor.gif?itemid=10102725");
+    const jimCramerSellGifLocal = $('<img>').attr('id','picture-modal').attr('src',"./Images/Gifs/Jim Cramer Sell.gif");
+    const angryWifeGif = $('<img>').attr('id','picture-modal').attr('src',"https://i.pinimg.com/originals/70/81/0f/70810f656b0c1839b54fb6e120256afb.gif");
+    const angryWifeGifLocal = $('<img>').attr('id','picture-modal').attr('src',"./Images/Gifs/Angry Wife.gif");
+    const hospitalLocal = $('<img>').attr('id','picture-modal').attr('src',"./Images/Gifs/Hospital.gif");
+
+    const makingMoneyModalPics = [jMaguireShowMeMoneyGifLocal,wolfofWallStreetBossGifLocal,wolfofWallStreetLeonardoDanceGifLocal,gordonGeckkoGifLocal,pDiddyLocal,jimCramerGifLocal,wolfofWallStreetFlexingLocal];
+    const makingMoneyPicMessages = [`Show ME THE MONEY!`,`Money ain't a thang!`, `PARTY TIME!`,`Gettin' Greedy`,`Making so much money you don't know what to do with it`,`Even Jim Cramer loves the stock your trading`, `Feeling good!`]
+    const losingMoneyModalPics = [stockCrash1GifLocal,stockCrash2GifLocal,stockCrash3GifLocal,workerStrikePicLocal,collegePicLocal,dentalPicLocal,brokePicLocal,jimCramerSellGifLocal,angryWifeGifLocal,hospitalLocal];
+    const losingMoneyPicMessages = [`Stock market crash coming! Get out now!`,`Stressed about how much money you lost today??!`, `I dont't think you are made to work on Wall Street!`,`Your stock tanks due to company strike`,`Portfolio takes hit due to pulling money for kids college expenses`,`Portfolio takes hit due to pulling money out to fix your ugly teeth`,`Keep losing money and you are going to have pockets that look like this`,`Jim Cramer thinks a stock market crash is coming BETTER SELL OR HEDGE POSITIONS NOW!`,`What is your wife's reaction going to be when she sees how much money you lost today???`,`Lost money due to having to go to hospital but you are still in rather good spirits`];
     
 
 
@@ -69,31 +84,31 @@ const marketPercentageMove = () => {
     let random4OverallMarketMove = Math.ceil(Math.random() * 101);
     console.log(random4OverallMarketMove);
     switch (true) {
-        case random4OverallMarketMove === 1: marketMove = -.25;
+        case random4OverallMarketMove === 1: marketMove = -1;
         break;
-        case random4OverallMarketMove === 2: marketMove = -.23;
+        case random4OverallMarketMove === 2: marketMove = -.75;
         break;
-        case random4OverallMarketMove === 3: marketMove = -.20;
+        case random4OverallMarketMove === 3: marketMove = -.50;
         break;
-        case random4OverallMarketMove === 4: marketMove = -.18;
+        case random4OverallMarketMove === 4: marketMove = -.25;
         break;
-        case random4OverallMarketMove === 5:  marketMove = -.15;
+        case random4OverallMarketMove === 5:  marketMove = -.20;
         break;
-        case random4OverallMarketMove >= 6 && random4OverallMarketMove <= 10:  marketMove = -.13;
+        case random4OverallMarketMove >= 6 && random4OverallMarketMove <= 10:  marketMove = -.18;
         break;
-        case random4OverallMarketMove >= 11 && random4OverallMarketMove <= 15:  marketMove = -.10;
+        case random4OverallMarketMove >= 11 && random4OverallMarketMove <= 15:  marketMove = -.15;
         break;
-        case random4OverallMarketMove >= 16 && random4OverallMarketMove <= 20:  marketMove = -.07;
+        case random4OverallMarketMove >= 16 && random4OverallMarketMove <= 20:  marketMove = -.10;
         break;
         case random4OverallMarketMove >= 21 && random4OverallMarketMove <= 25:  marketMove = -.02;
         break;
-        case random4OverallMarketMove >= 26 && random4OverallMarketMove <= 80:  marketMove = .02;
+        case random4OverallMarketMove >= 26 && random4OverallMarketMove <= 80:  marketMove = .10;
         break;
-        case random4OverallMarketMove >= 80 && random4OverallMarketMove <= 90:  marketMove = .03;
+        case random4OverallMarketMove >= 80 && random4OverallMarketMove <= 90:  marketMove = .25;
         break;
-        case random4OverallMarketMove >= 90 && random4OverallMarketMove <= 95:  marketMove = .05;
+        case random4OverallMarketMove >= 90 && random4OverallMarketMove <= 95:  marketMove = .50;
         break;
-        case random4OverallMarketMove >= 96 && random4OverallMarketMove <= 100:  marketMove = .10;
+        case random4OverallMarketMove >= 96 && random4OverallMarketMove <= 100:  marketMove = .75;
         break;
     }
     return marketMove;
@@ -109,6 +124,25 @@ const timeDelay = () => {
 
 const timeDelayHide = () => {
     $modalBox.hide();
+}
+
+let commaNum = (number) => {
+    let modNum = number.toFixed(2); // takes number and makes it a string e.g. 23000 and converts it to '23000'
+    let numSplit = modNum.split('.'); //splits string into an array e.g. [23000, 00] 2 00's in index 1 of array is any decimals/cents in number
+    let int = numSplit[0]; // takes 0 index of array above [23000]
+    if (int.length > 3 && int.length <=6) { //uses substr method where you specify index and how many index spots over to take. E.g. 23000 it is starting at index 0 and going over to index 1 and placing commma after index 1. Follow code for bigger numbers that have 6 or more digits
+        int = `${int.substr(0, int.length - 3)},${int.substr(int.length - 3,3)}`
+    }
+    else {
+        int = `${int.substr(0, int.length - 6)},${int.substr(int.length - 6,3)},${int.substr(int.length - 3,3)}`
+    }
+    return int;
+    }
+
+let leftArrowAnimationFuction = () => {
+    const $leftArrowActionAnimation = $('<img>').attr('id','left-arrow').attr('src','./Images/Left Arrow.png');
+    $leftArrow.prepend($leftArrowActionAnimation);
+    $leftArrow.append($('<p>').attr('id','arrow-message').text('Click here to start trading'));
 }
 
 //----------------------------------CLASSES----------------------------------------------  
@@ -144,14 +178,12 @@ class Player extends Stocks {
         this.beginningBalance4modalPic = this.finalPortfolioValue
         let portfolioPercentageMove = marketPercentageMove();
         let balanceChange = previousBalance * portfolioPercentageMove
-        let message = `${this.name} made $${balanceChange.toFixed(2)*1}`
+        let message = `${this.name} made $${balanceChange.toFixed(0)*1}`
         console.log(message);
-        let newPortfolioValueAfterGeneralMarketMove = (previousBalance *= (1+portfolioPercentageMove)).toFixed(2)*1;
+        let newPortfolioValueAfterGeneralMarketMove = (previousBalance *= (1+portfolioPercentageMove)).toFixed(0)*1;
         return this.portfolioValueB4LifeEvent = newPortfolioValueAfterGeneralMarketMove;
     }
-    portfolioChangeMessage() {
-
-    }
+  
     greedyProbability() {
         
     }
@@ -159,17 +191,17 @@ class Player extends Stocks {
         let randomEventMove = Math.ceil(Math.random() * 101);
         console.log(randomEventMove);
         switch (true) {
-            case randomEventMove === 1: eventMover = -.50;
+            case randomEventMove === 1: eventMover = -100000;
                 break;
-            case randomEventMove === 2: eventMover = -.25;
+            case randomEventMove === 2: eventMover = -50000;
                 break;
-            case randomEventMove === 3: eventMover = -.20;
+            case randomEventMove === 3: eventMover = -25000;
                 break;
-            case randomEventMove === 4: eventMover = -.15;
+            case randomEventMove === 4: eventMover = -20000;
                 break;
-            case randomEventMove === 5:  eventMover = -.10;
+            case randomEventMove === 5:  eventMover = -10000;
                 break;
-            case randomEventMove >= 6 && randomEventMove <= 30:  eventMover = -.02;
+            case randomEventMove >= 6 && randomEventMove <= 30:  eventMover = -2000;
                 break;
             case randomEventMove >= 31 && randomEventMove <= 100:  eventMover = 0;
                 break;
@@ -182,23 +214,26 @@ class Player extends Stocks {
         console.log(this.portfolioValueB4LifeEvent);
         console.log(this.eventMover);
         console.log(1 + this.eventMover);
-        console.log((this.portfolioValueB4LifeEvent * (1+this.eventMover).toFixed(2)*1));
-        let totalPortfolioValuePercentChange = (1 + this.eventMover);
-        let finalPortfolioValue = (this.portfolioValueB4LifeEvent *= (totalPortfolioValuePercentChange)).toFixed(2)*1;
+        console.log((this.portfolioValueB4LifeEvent * (1+this.eventMover).toFixed(0)*1));
+        //let totalPortfolioValuePercentChange = (1 + this.eventMover);
+        //let finalPortfolioValue = (this.portfolioValueB4LifeEvent *= (totalPortfolioValuePercentChange)).toFixed(2)*1;
+        let finalPortfolioValue = (this.portfolioValueB4LifeEvent +this.eventMover).toFixed(2)*1;
         console.log(finalPortfolioValue);
-        playerTurn === 'p1' ? $player1Money.text(`$`+ finalPortfolioValue) : $player2Money.text(`$`+ finalPortfolioValue);
+        let finalNumforDOM = commaNum(finalPortfolioValue);
+        playerTurn === 'p1' ? $player1Money.text(`$`+ finalNumforDOM) : $player2Money.text(`$`+ finalNumforDOM);
+        //playerTurn === 'p1' ? $player1Money.text(`$`+ finalPortfolioValue) : $player2Money.text(`$`+ finalPortfolioValue);
         this.winOrLoseGameCheck(); //might need to separate this into just an event handler
         return this.finalPortfolioValue = finalPortfolioValue;
     }
     winOrLoseGameCheck() {
         if (this.finalPortfolioValue >= TargetWinGoal) { 
         $modalBox.show();
-        $($modalMessage).text(`${this.name} has made it on Wall Street!`).css({
+        $($modalMessage).text(`${fullPlayerSpelling} has made it on Wall Street!`).css({
             fontSize: 50
         })
         } else if (this.finalPortfolioValue <= 0) {
         $modalBox.show();
-        $($modalMessage).text(`${this.name} Wall Street is just not for you.`).css({
+        $($modalMessage).text(`${fullPlayerSpelling} Wall Street is just not for you.`).css({
             fontSize: 50
             })
         }
@@ -209,9 +244,28 @@ class Player extends Stocks {
         console.log(makingMoneyModalPics.length);
         const randomMakingMoneyModalPic = Math.floor(Math.random() * makingMoneyModalPics.length);
         const randomLosingMoneyModalPic = Math.floor(Math.random() * losingMoneyModalPics.length);
-        this.portfolioDollarChange > 0 ? $modalPictureSpot.prepend(makingMoneyModalPics[randomMakingMoneyModalPic]) : $modalPictureSpot.prepend(losingMoneyModalPics[randomLosingMoneyModalPic])
+        console.log(randomMakingMoneyModalPic);
+        console.log(randomLosingMoneyModalPic);
+        if (this.portfolioDollarChange > 0){
+            $modalPictureSpot.prepend(makingMoneyModalPics[randomMakingMoneyModalPic])
+            this.portfolioChangeMessage(randomMakingMoneyModalPic, 'win')
+        } else {
+            $modalPictureSpot.prepend(losingMoneyModalPics[randomLosingMoneyModalPic])
+            this.portfolioChangeMessage(randomLosingMoneyModalPic, 'lose') 
+        }
+        //this.portfolioDollarChange > 0 ? $modalPictureSpot.prepend(makingMoneyModalPics[randomMakingMoneyModalPic]) : $modalPictureSpot.prepend(losingMoneyModalPics[randomLosingMoneyModalPic])
     }
-   
+    portfolioChangeMessage(randomNum,winLose) {
+        let message = winLose === 'win' ? makingMoneyPicMessages[randomNum] : losingMoneyPicMessages [randomNum];
+        $modalPictureMessage.text(message);
+        $modalPictureMessage.show().css({
+            visibility: 'visible'
+        });
+        console.log(this.portfolioDollarChange);
+        let portfolioDollarChangewithCommas = commaNum(this.portfolioDollarChange)
+        this.portfolioDollarChange > 0 ? $moneyChangeMessage.text(`Your portfolio increased $${portfolioDollarChangewithCommas}`) 
+        : $moneyChangeMessage.text(`Your portfolio decreased $${portfolioDollarChangewithCommas}`);
+    }
 }
 
 
@@ -254,11 +308,32 @@ $(()=>{
         
         $closeStartModalButton.on('click',() => {
             $modalBox.hide();
-            $stockSymbols.removeClass('not-active');
-            $stockSymbolsSection.css({
-                opacity: '.9'
-            })
+            setTimeout(() => {
+                $modalBox.show();
+                $($modalMessage).text('Player 1 Choose Your Stock').css({
+                    fontSize: 50,
+                    textAlign: 'center'
+                })
+            }, 1500);
+            setTimeout(() => {
+                $modalBox.hide();
+                $stockSymbols.removeClass('not-active');
+                $stockSymbolsSection.css({
+                    opacity: '.9'
+                })
+            },3500);
         })
+
+        
+        $instructions.on('click',() => {
+            $modalBox.show();
+            $($modalMessage).text(instructionsGuide).css({
+                fontSize: 20,
+                color: 'red',
+                textAlign: 'left', 
+            }).attr('id','instructions-modal')
+        })
+        
 
         $facebookImage.on('click',() => {
             console.log('You clicked on facebook');
@@ -283,7 +358,11 @@ $(()=>{
                 eval(`$${p1StockChoice}Image`).removeClass('not-active').addClass('p1-remaining').css({
                     opacity: .9
                 }).attr('id','p1-remaining');
+                $('#vs').css({
+                    visibility: 'visible'
+                })
                 playerTurn = 'p1';
+                leftArrowAnimationFuction(); 
             } else {
                 return;
             }
@@ -312,7 +391,11 @@ $(()=>{
                 eval(`$${p1StockChoice}Image`).removeClass('not-active').addClass('p1-remaining').css({
                     opacity: .9
                 }).attr('id','p1-remaining');
+                $('#vs').css({
+                    visibility: 'visible'
+                })
                 playerTurn = 'p1';
+                leftArrowAnimationFuction(); 
             } else {
                 return;
             }
@@ -341,7 +424,11 @@ $(()=>{
                 eval(`$${p1StockChoice}Image`).removeClass('not-active').addClass('p1-remaining').css({
                     opacity: .9
                 }).attr('id','p1-remaining');
+                $('#vs').css({
+                    visibility: 'visible'
+                })
                 playerTurn = 'p1';
+                leftArrowAnimationFuction(); 
             } else {
                 return;
             }
@@ -370,7 +457,11 @@ $(()=>{
                 eval(`$${p1StockChoice}Image`).removeClass('not-active').addClass('p1-remaining').css({
                     opacity: .9
                 }).attr('id','p1-remaining');
+                $('#vs').css({
+                    visibility: 'visible'
+                })
                 playerTurn = 'p1';
+                leftArrowAnimationFuction(); 
             } else {
                 return;
             }
@@ -399,7 +490,11 @@ $(()=>{
                 eval(`$${p1StockChoice}Image`).removeClass('not-active').addClass('p1-remaining').css({
                     opacity: .9
                 }).attr('id','p1-remaining');
+                $('#vs').css({
+                    visibility: 'visible'
+                })
                 playerTurn = 'p1';
+                leftArrowAnimationFuction(); 
             } else {
                 return;
             }
@@ -428,7 +523,11 @@ $(()=>{
                 eval(`$${p1StockChoice}Image`).removeClass('not-active').addClass('p1-remaining').css({
                     opacity: .9
                 }).attr('id','p1-remaining');
+                $('#vs').css({
+                    visibility: 'visible'
+                })
                 playerTurn = 'p1';
+                leftArrowAnimationFuction(); 
             } else {
                 return;
             }
@@ -438,13 +537,33 @@ $(()=>{
             if (playerTurn ==='p2'){
                 return
             } else {
+            $('#vs').css({
+                visibility: 'hidden'
+            })
+            $('#left-arrow').hide();
+            $('#arrow-message').hide();
+            $modalPictureSpot.show();
+            $moneyChangeContainer.show();
             console.log('You clicked the keep trading button');
+            if (playerTurn == 'p1') {
+                fullPlayerSpelling = 'player1';
+            } else {
+                fullPlayerSpelling = 'player2';
+            }
             eval(fullPlayerSpelling).totalPortfolioMove();
             eval(fullPlayerSpelling).winOrLoseGameCheck();
             eval(fullPlayerSpelling).winorLoseModalPic();
+            
             setTimeout(() => {
                 $modalPictureSpot.hide();
-            },3000)
+                $modalPictureSpot.children().eq(0).remove();
+                $('#vs').css({
+                    visibility: 'visible'
+                })
+            },5000);
+            setTimeout(() => {
+                $moneyChangeContainer.hide(); 
+            },5000);
             }
         })
 
@@ -452,13 +571,31 @@ $(()=>{
             if (playerTurn ==='p1'){
                 return
             } else {
+            $('#vs').css({
+                    visibility: 'hidden'
+                })
+            $modalPictureSpot.show();
+            $moneyChangeContainer.show();
             console.log('You clicked the keep trading button');
+            if (playerTurn == 'p1') {
+                fullPlayerSpelling = 'player1';
+            } else {
+                fullPlayerSpelling = 'player2';
+            }
             eval(fullPlayerSpelling).totalPortfolioMove();
             eval(fullPlayerSpelling).winOrLoseGameCheck(); 
             eval(fullPlayerSpelling).winorLoseModalPic();
+            
             setTimeout(() => {
                 $modalPictureSpot.hide();
-            },3000) 
+                $modalPictureSpot.children().eq(0).remove();
+                $('#vs').css({
+                    visibility: 'visible'
+                })
+            },5000);
+            setTimeout(() => {
+                $moneyChangeContainer.hide(); 
+            },5000);
             }
         })
 
@@ -469,7 +606,7 @@ $(()=>{
             $($modalMessage).text(`Player 2 start trading but don't be too greedy!`).css({
                 fontSize: 40
             })
-            setTimeout(() => {$modalBox.hide()},5000);
+            setTimeout(() => {$modalBox.hide()},3000);
 
         })
 
@@ -480,16 +617,12 @@ $(()=>{
             $($modalMessage).text(`Player 1 start trading but don't be too greedy!`).css({
                 fontSize: 40
             })
-            setTimeout(() => {$modalBox.hide()},5000);
+            setTimeout(() => {$modalBox.hide()},3000);
 
         })
 
        
-        
-
-
-    
-        
+      
     
 
 
@@ -509,6 +642,3 @@ $(()=>{
 
 
         })
-        
-    
-
