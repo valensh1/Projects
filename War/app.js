@@ -68,7 +68,7 @@ let cardsIndex = [];
     }))
     
 
-
+//-----------------------------------------------CLASS CREATIONS--------------------------------------------------------
 class Cards {
 constructor(playingCards){
     this.cards = playingCards; 
@@ -95,12 +95,25 @@ shuffle() {
         }
         for (let j = halfOfNoMatchesCalc + 1 ; j < noMatchesLength; j++){
         shuffledDeckArray.push(noMatches[j]);
-        }   
+        } 
+        this.completeShuffledDeck(shuffledDeckArray);
         return shuffledDeckArray; // This will return a completely shuffled deck of cards by index number to then use to pull up actual card from the sorted playingCards variable   
     }
+
+completeShuffledDeck(shuffledDeckArray) {
+        let completeShuffledDeck = [];
+        for (let i = 0; i < this.cards.length; i++){
+            completeShuffledDeck.push(this.cards[shuffledDeckArray[i]]);
+        }
+        return completeShuffledDeck;
+}
+
+
+
 }
 
 const deck1 = new Cards(playingCards);
+console.log(deck1.cards);
 
 
 
