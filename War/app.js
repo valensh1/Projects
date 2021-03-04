@@ -57,6 +57,7 @@ const hearts12 = $('<img>').addClass('dealt-card').attr('id','player1Card1').att
 const hearts13 = $('<img>').addClass('dealt-card').attr('id','player1Card1').attr('src',"./Images/KingHearts.png");
 const hearts14= $('<img>').addClass('dealt-card').attr('id','player1Card1').attr('src',"./Images/AceHearts.png");
 let shuffledDeck = [];
+let dealtCards = -1;
 
 const playingCards = [];
 for (let i = 2; i<=14; i++){
@@ -115,16 +116,14 @@ completeShuffledDeck(shuffledDeckArray) {
         return this.shuffledDeck = shuffledDeck;
 }
 
+
 deal(numOfCardsDealt) {
     $player1Card1.remove();
     console.log(numOfCardsDealt);
     let card2Deal = eval(this.shuffledDeck[numOfCardsDealt]);
     console.log(card2Deal);
-    $dealerCard.after(card2Deal); 
+    $dealerCard.after(card2Deal);
 }
-
-
-
 
 }
 
