@@ -9,10 +9,6 @@ Compete against another player to see who is the best trader and can reach $1M i
 <li> CSS
 <li> Javascript
 
-# USER STORIES:
-
-# MVP:
-
 # STRETCH GOALS:
 My stretch goals in this project was to learn animations and include in project
 
